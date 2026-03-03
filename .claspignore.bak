@@ -1,0 +1,4 @@
+**/**
+!gas/**
+!gas/appsscript.json
+node_modules/**
