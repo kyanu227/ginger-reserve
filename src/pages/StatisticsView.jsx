@@ -1,3 +1,8 @@
+/**
+ * 統計ページ（管理画面）
+ * 売上推移・メニュー別・曜日別の統計をグラフで表示（recharts使用）
+ * 関連: api/stats.js
+ */
 import { useState, useEffect, useMemo } from 'react'
 import AdminSidebar from '../components/AdminSidebar'
 import { getStats, formatPrice } from '../lib/api'

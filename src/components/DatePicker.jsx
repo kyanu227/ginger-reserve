@@ -1,4 +1,9 @@
+/**
+ * カレンダー日付選択コンポーネント（お客様フォーム用）
+ * 月送り + 日付グリッド。slots データから予約可能日をハイライト
+ */
 import { useState, useMemo } from 'react'
+import { DAY_LABELS } from '../lib/constants'
 
 export default function DatePicker({ selected, onSelect, onMonthChange, availableDates, closedDays = [0] }) {
     const [currentDate, setCurrentDate] = useState(() => selected ? new Date(selected) : new Date())
@@ -43,7 +48,12 @@ export default function DatePicker({ selected, onSelect, onMonthChange, availabl
         return result
     }, [year, month, selected, availableDates, closedDays])
 
+    // 当月より前には戻れない
+    const now = new Date()
+    const isCurrentMonth = year === now.getFullYear() && month === now.getMonth()
+
     function navigate(delta) {
+        if (delta < 0 && isCurrentMonth) return // 前月への移動を禁止
         const newDate = new Date(year, month + delta, 1)
         setCurrentDate(newDate)
         if (onMonthChange) {
@@ -51,12 +61,12 @@ export default function DatePicker({ selected, onSelect, onMonthChange, availabl
         }
     }
 
-    const dayNames = ['日', '月', '火', '水', '木', '金', '土']
+    const dayNames = DAY_LABELS
 
     return (
         <div className="datepicker">
             <div className="datepicker-header">
-                <button className="datepicker-nav" onClick={() => navigate(-1)}>◀</button>
+                <button className="datepicker-nav" onClick={() => navigate(-1)} disabled={isCurrentMonth} style={isCurrentMonth ? { opacity: 0.25, cursor: 'default' } : {}}>◀</button>
                 <span className="datepicker-title">{year}年{month + 1}月</span>
                 <button className="datepicker-nav" onClick={() => navigate(1)}>▶</button>
             </div>

@@ -1,20 +1,12 @@
-import { useState, useEffect } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '../lib/firebase'
+/**
+ * 管理画面の認証ガード
+ * 未ログイン or staff 未登録 → AdminLogin を表示
+ */
+import { useRole } from '../lib/RoleContext'
 import AdminLogin from '../pages/AdminLogin'
-import { ADMIN_EMAILS } from '../lib/config'
 
 export default function AuthGuard({ children }) {
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user)
-            setLoading(false)
-        })
-        return () => unsubscribe()
-    }, [])
+    const { user, role, loading } = useRole()
 
     if (loading) {
         return (
@@ -26,9 +18,7 @@ export default function AuthGuard({ children }) {
         )
     }
 
-    if (!user || !ADMIN_EMAILS.includes(user.email)) {
-        return <AdminLogin />
-    }
+    if (!user || !role) return <AdminLogin />
 
     return children
 }
