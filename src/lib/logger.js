@@ -1,3 +1,7 @@
+/**
+ * ログユーティリティ
+ * ErrorBoundary.jsx から使用。GAS 経由でエラーログを送信
+ */
 import { GAS_API_URL } from './api';
 
 class Logger {
