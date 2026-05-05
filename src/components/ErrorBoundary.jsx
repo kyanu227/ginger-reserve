@@ -1,3 +1,7 @@
+/**
+ * React エラーバウンダリ
+ * レンダリングエラーをキャッチし、logger.js でログ送信 + フォールバックUI表示
+ */
 import React from 'react';
 import logger from '../lib/logger';
 
